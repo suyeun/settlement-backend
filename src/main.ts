@@ -16,9 +16,11 @@ async function bootstrap() {
       'http://localhost:3000',
       'https://settlement-frontend-production.up.railway.app'
     ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type,Accept,Authorization',
     credentials: true,
   });
-  
+
 
   // Validation Pipe 글로벌 설정
   app.useGlobalPipes(new ValidationPipe());
