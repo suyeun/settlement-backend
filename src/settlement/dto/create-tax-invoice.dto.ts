@@ -30,4 +30,8 @@ export class CreateTaxInvoiceDto {
   @IsOptional()
   @IsString()
   note?: string;
+
+  @IsOptional()
+  @IsString()
+  imagePath?: string;
 } 

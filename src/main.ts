@@ -3,6 +3,8 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
+import * as express from 'express';
+import { join } from 'path';
 
 dotenv.config();
 
@@ -12,10 +14,7 @@ async function bootstrap() {
   
 
   app.enableCors({
-    origin: [
-      'http://localhost:3000',
-      'https://settlement-frontend-production.up.railway.app'
-    ],
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: 'Content-Type,Accept,Authorization',
     credentials: false,
@@ -44,6 +43,8 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
+
+  app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
 
   await app.listen(process.env.PORT || 3001);
   

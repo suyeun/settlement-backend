@@ -1,15 +1,19 @@
-import { Controller, Get, Post, Body, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Query, UseGuards, Inject } from '@nestjs/common';
 import { SettlementService } from './settlement.service';
 import { CreateSettlementDto } from './dto/create-settlement.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { SettlementQueryDto } from './dto/settlement-query.dto';
 import { ApiOperation, ApiOkResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { RecruitmentService } from '../recruitment/recruitment.service';
 
 @ApiBearerAuth('access-token')
 @Controller('settlements')
 @UseGuards(JwtAuthGuard)
 export class SettlementController {
-  constructor(private readonly settlementService: SettlementService) {}
+  constructor(
+    private readonly settlementService: SettlementService,
+    private readonly recruitmentService: RecruitmentService,
+  ) {}
 
   @Post()
   create(@Body() createSettlementDto: CreateSettlementDto) {
@@ -45,14 +49,15 @@ export class SettlementController {
       }
     }
   })
-  findAll(@Query() query: SettlementQueryDto) {
-    const { page = 1, limit = 10, search, startDate, endDate } = query;
+  findAll(@Query() query: any) {
+    const { page = 1, limit = 10, search, startDate, endDate, company } = query;
     return this.settlementService.findAll(
       Number(page),
       Number(limit),
       search,
       startDate,
       endDate,
+      company,
     );
   }
 
@@ -64,5 +69,42 @@ export class SettlementController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.settlementService.remove(+id);
+  }
+
+  @Get('/dashboard/summary')
+  async getDashboardSummary() {
+    // 정산내역
+    const settlements = await this.settlementService.findAll(1, 1000);
+    // 파견
+    const dispatch = await this.recruitmentService.findAll(1, 1000, 'dispatch');
+    // 채용대행
+    const recruitment = await this.recruitmentService.findAll(1, 1000, 'recruitment');
+    // 월별 집계
+    const monthMap = new Map();
+    settlements.data.forEach((item: any) => {
+      const m = item.settlementMonth;
+      if (!monthMap.has(m)) monthMap.set(m, { month: m, companyCount: 0, dispatchCount: 0, recruitCount: 0, revenue: 0, commission: 0 });
+      const row = monthMap.get(m);
+      row.companyCount += Number(item.companyCount || 0);
+      row.revenue += Number(item.billingAmount || 0);
+      row.commission += Number(item.settlementCommission || 0);
+    });
+    dispatch.data.forEach((item: any) => {
+      const m = item.settlementMonth;
+      if (!monthMap.has(m)) monthMap.set(m, { month: m, companyCount: 0, dispatchCount: 0, recruitCount: 0, revenue: 0, commission: 0 });
+      const row = monthMap.get(m);
+      row.dispatchCount += Number(item.employeeCount || 0);
+      row.commission += Number(item.settlementCommission || 0);
+    });
+    recruitment.data.forEach((item: any) => {
+      const m = item.settlementMonth;
+      if (!monthMap.has(m)) monthMap.set(m, { month: m, companyCount: 0, dispatchCount: 0, recruitCount: 0, revenue: 0, commission: 0 });
+      const row = monthMap.get(m);
+      row.recruitCount += Number(item.employeeCount || 0);
+      row.commission += Number(item.settlementCommission || 0);
+    });
+    // 월 정렬
+    const monthRows = Array.from(monthMap.values()).sort((a, b) => a.month.localeCompare(b.month));
+    return { data: monthRows };
   }
 } 

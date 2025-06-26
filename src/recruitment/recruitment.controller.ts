@@ -50,12 +50,15 @@ export class RecruitmentController {
       }
     }
   })
-  findAll(@Query() query: RecruitmentQueryDto) {
-    const { page = 1, limit = 10, search } = query;
+  findAll(@Query() query: any) {
+    const { page = 1, limit = 10, search, dateRange, company, type } = query;
     return this.recruitmentService.findAll(
       Number(page),
       Number(limit),
       search,
+      dateRange,
+      company,
+      type,
     );
   }
 
@@ -69,9 +72,9 @@ export class RecruitmentController {
     return this.recruitmentService.remove(+id);
   }
 
-  @Post('upload-csv')
+  @Post('upload-csv/dispatch')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadCsv(@UploadedFile() file: Express.Multer.File) {
+  async uploadDispatchCsv(@UploadedFile() file: Express.Multer.File) {
     if (!file) {
       throw new Error('파일을 선택해주세요.');
     }
@@ -85,8 +88,8 @@ export class RecruitmentController {
         .pipe(csvParser())
         .on('data', (data) => {
           const recruitment: CreateRecruitmentDto = {
-            settlementMonth: data['정산 월'] || data['settlement_month'],
-            clientName: data['거래처명'] || data['client_name'],
+            settlementMonth: data['정산 월'] || data['settlement_month'] || '',
+            clientName: data['거래처명'] || data['client_name'] || '',
             employeeCount: parseInt(data['인원수'] || data['employee_count']) || 0,
             billingAmount: parseFloat(data['청구금액'] || data['billing_amount']) || 0,
             commission: parseFloat(data['수수료'] || data['commission']) || 0,
@@ -97,6 +100,53 @@ export class RecruitmentController {
             settlementCommission: parseFloat(data['정산 수수료'] || data['settlement_commission']) || 0,
             settlementDate: data['정산일자'] || data['settlement_date'] || null,
             note: data['비고'] || data['note'] || '',
+            type: 'dispatch',
+          };
+          results.push(recruitment);
+        })
+        .on('end', async () => {
+          try {
+            const saved = await this.recruitmentService.createBulk(results);
+            resolve({ message: 'CSV 업로드 성공', count: saved.length });
+          } catch (error) {
+            reject(error);
+          }
+        })
+        .on('error', (error) => {
+          reject(error);
+        });
+    });
+  }
+
+  @Post('upload-csv/recruitment')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadRecruitmentCsv(@UploadedFile() file: Express.Multer.File) {
+    if (!file) {
+      throw new Error('파일을 선택해주세요.');
+    }
+    if (file.mimetype !== 'text/csv' && !file.originalname.endsWith('.csv')) {
+      throw new Error('CSV 파일만 업로드 가능합니다.');
+    }
+    const results: CreateRecruitmentDto[] = [];
+    return new Promise(async (resolve, reject) => {
+      const stream = Readable.from(file.buffer.toString());
+      stream
+        .pipe(csvParser())
+        .on('data', (data) => {
+          const recruitment: CreateRecruitmentDto = {
+            settlementMonth: data['정산 월'] || data['settlement_month'] || '',
+            clientName: data['거래처명'] || data['client_name'] || '',
+            employeeCount: parseInt(data['인원수'] || data['employee_count']) || 0,
+            billingAmount: parseFloat(data['청구금액'] || data['billing_amount']) || 0,
+            commission: parseFloat(data['수수료'] || data['commission']) || 0,
+            commissionStandard: data['수수료 지급기준'] || data['commission_standard'] || '',
+            billingPeriod: data['청구기간'] || data['billing_period'] || '',
+            depositDate: data['입금일자'] || data['deposit_date'] || null,
+            taxInvoiceDate: data['세금계산서 발행일'] || data['tax_invoice_date'] || null,
+            settlementCommission: parseFloat(data['정산 수수료'] || data['settlement_commission']) || 0,
+            settlementDate: data['정산일자'] || data['settlement_date'] || null,
+            note: data['비고'] || data['note'] || '',
+            type: 'recruitment',
           };
           results.push(recruitment);
         })

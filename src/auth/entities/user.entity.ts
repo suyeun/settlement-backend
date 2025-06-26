@@ -17,8 +17,8 @@ export class User {
   @Column({ default: true, comment: '활성화 여부' })
   isActive: boolean;
 
-  @Column({ type: 'varchar', length: 10, default: 'user', comment: '권한 (admin, user)' })
-  role: 'admin' | 'user';
+  @Column({ name: 'role', type: 'varchar', length: 20, default: 'user', comment: '사용자 권한(admin, user)' })
+  role: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

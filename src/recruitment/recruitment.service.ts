@@ -25,17 +25,31 @@ export class RecruitmentService {
     page: number = 1,
     limit: number = 10,
     search?: string,
+    dateRange?: [string, string],
+    company?: string,
+    type?: string,
   ): Promise<{ data: Recruitment[]; total: number; page: number; limit: number }> {
     const skip = (page - 1) * limit;
     const queryBuilder = this.recruitmentRepository.createQueryBuilder('recruitment');
 
+    if (type) {
+      queryBuilder.andWhere('recruitment.type = :type', { type });
+    }
+    if (company && company !== '전체업체') {
+      queryBuilder.andWhere('recruitment.clientName = :company', { company });
+    }
+    if (dateRange && dateRange[0] && dateRange[1]) {
+      queryBuilder.andWhere('recruitment.settlementMonth BETWEEN :start AND :end', {
+        start: dateRange[0],
+        end: dateRange[1],
+      });
+    }
     if (search) {
       queryBuilder.andWhere(
         '(recruitment.settlementMonth ILIKE :search OR recruitment.clientName ILIKE :search OR recruitment.note ILIKE :search)',
         { search: `%${search}%` }
       );
     }
-
     queryBuilder
       .orderBy('recruitment.createdAt', 'DESC')
       .skip(skip)

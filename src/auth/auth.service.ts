@@ -51,7 +51,7 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto): Promise<User> {
-    const { username, password, name } = registerDto;
+    const { username, password, name, role } = registerDto;
     const exists = await this.userRepository.findOne({ where: { username } });
     if (exists) {
       throw new Error('이미 존재하는 아이디입니다.');
@@ -61,8 +61,22 @@ export class AuthService {
       username,
       password: hashedPassword,
       name,
-      role: 'user',
+      role: role || 'user',
     });
     return this.userRepository.save(user);
+  }
+
+  async getUsers(): Promise<User[]> {
+    return this.userRepository.find();
+  }
+
+  async updateUser(id: number, update: Partial<User>): Promise<User> {
+    await this.userRepository.update(id, update);
+    return this.userRepository.findOneBy({ id });
+  }
+
+  async deleteUser(id: number): Promise<{ message: string }> {
+    await this.userRepository.delete(id);
+    return { message: '삭제되었습니다.' };
   }
 } 

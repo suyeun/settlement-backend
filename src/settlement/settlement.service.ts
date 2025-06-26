@@ -26,6 +26,7 @@ export class SettlementService {
     search?: string,
     startDate?: string,
     endDate?: string,
+    company?: string,
   ): Promise<{ data: Settlement[]; total: number; page: number; limit: number }> {
     const skip = (page - 1) * limit;
     const queryBuilder = this.settlementRepository.createQueryBuilder('settlement');
@@ -42,6 +43,10 @@ export class SettlementService {
         'settlement.settlementDate BETWEEN :startDate AND :endDate',
         { startDate, endDate }
       );
+    }
+
+    if (company && company !== '전체업체') {
+      queryBuilder.andWhere('settlement.companyName = :company', { company });
     }
 
     queryBuilder

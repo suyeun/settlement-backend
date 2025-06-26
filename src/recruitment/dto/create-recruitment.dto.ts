@@ -55,4 +55,8 @@ export class CreateRecruitmentDto {
   @IsOptional()
   @IsString()
   note?: string;
+
+  @ApiProperty({ example: 'dispatch', description: '구분(파견: dispatch, 채용대행: recruitment)' })
+  @IsString()
+  type: string;
 } 

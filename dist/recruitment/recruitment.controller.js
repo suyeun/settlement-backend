@@ -50,8 +50,8 @@ let RecruitmentController = class RecruitmentController {
                 .pipe(csvParser())
                 .on('data', (data) => {
                 const recruitment = {
-                    settlementMonth: data['정산 월'] || data['settlement_month'],
-                    clientName: data['거래처명'] || data['client_name'],
+                    settlementMonth: data['정산 월'] || data['settlement_month'] || '',
+                    clientName: data['거래처명'] || data['client_name'] || '',
                     employeeCount: parseInt(data['인원수'] || data['employee_count']) || 0,
                     billingAmount: parseFloat(data['청구금액'] || data['billing_amount']) || 0,
                     commission: parseFloat(data['수수료'] || data['commission']) || 0,

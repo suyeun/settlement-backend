@@ -41,6 +41,9 @@ export class Recruitment {
   @Column({ name: 'note', type: 'text', nullable: true, comment: '비고' })
   note: string;
 
+  @Column({ name: 'type', type: 'varchar', length: 20, comment: '구분(파견/채용대행)' })
+  type: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

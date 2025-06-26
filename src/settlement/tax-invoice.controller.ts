@@ -1,10 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseInterceptors, UploadedFile, Req } from '@nestjs/common';
 import { TaxInvoiceService } from './tax-invoice.service';
 import { CreateTaxInvoiceDto } from './dto/create-tax-invoice.dto';
 import { UpdateTaxInvoiceDto } from './dto/update-tax-invoice.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as csvParser from 'csv-parser';
 import { Readable } from 'stream';
+import { diskStorage } from 'multer';
+import * as path from 'path';
+import * as fs from 'fs';
 
 @Controller('tax-invoices')
 export class TaxInvoiceController {
@@ -75,5 +78,66 @@ export class TaxInvoiceController {
           reject(error);
         });
     });
+  }
+
+  @Post('upload-image')
+  @UseInterceptors(FileInterceptor('file', {
+    storage: diskStorage({
+      destination: (req, file, cb) => {
+        const { year, month } = req.body;
+        const dir = path.join(__dirname, '../../../uploads/tax-invoice', `${year}-${month}`);
+        if (!fs.existsSync(dir)) {
+          fs.mkdirSync(dir, { recursive: true });
+        }
+        cb(null, dir);
+      },
+      filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        const basename = path.basename(file.originalname, ext);
+        cb(null, `${basename}-${Date.now()}${ext}`);
+      },
+    }),
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype.match(/image\/(jpeg|png|jpg)/)) {
+        cb(null, true);
+      } else {
+        cb(new Error('이미지 파일(jpg, jpeg, png)만 업로드 가능합니다.'), false);
+      }
+    },
+  }))
+  async uploadImage(@UploadedFile() file: Express.Multer.File, @Body() body: any) {
+    if (!file) {
+      throw new Error('이미지 파일을 선택해주세요.');
+    }
+    const { year, month, id } = body;
+    const imagePath = `/uploads/tax-invoice/${year}-${month}/${file.filename}`;
+    if (id) {
+      // 기존 이미지 삭제 및 DB 업데이트
+      const old = await this.taxInvoiceService.findOne(Number(id));
+      if (old && old.imagePath) {
+        const oldPath = path.join(__dirname, '../../..', old.imagePath);
+        if (fs.existsSync(oldPath)) {
+          fs.unlinkSync(oldPath);
+        }
+      }
+      await this.taxInvoiceService.update(Number(id), { imagePath });
+      return { message: '이미지 교체 성공', id, imagePath };
+    } else {
+      // 신규 업로드
+      const dto: any = {
+        settlementMonth: `${year}-${month}`,
+        imagePath,
+        companyCount: 0,
+        employeeCount: 0,
+        billingAmount: 0,
+        commission: 0,
+        depositDate: null,
+        settlementCommission: 0,
+        settlementDate: null,
+        note: '',
+      };
+      const saved = await this.taxInvoiceService.create(dto);
+      return { message: '이미지 업로드 성공', data: saved };
+    }
   }
 } 
