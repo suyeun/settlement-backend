@@ -6,9 +6,7 @@ import { SettlementQueryDto } from './dto/settlement-query.dto';
 import { ApiOperation, ApiOkResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { RecruitmentService } from '../recruitment/recruitment.service';
 
-@ApiBearerAuth('access-token')
 @Controller('settlements')
-@UseGuards(JwtAuthGuard)
 export class SettlementController {
   constructor(
     private readonly settlementService: SettlementService,

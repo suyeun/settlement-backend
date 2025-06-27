@@ -24,13 +24,11 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('me')
   getMe(@Request() req) {
     return req.user;
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('users')
   async getUsers(@Request() req) {
     if (req.user.role !== 'admin') throw new ForbiddenException('권한이 없습니다.');

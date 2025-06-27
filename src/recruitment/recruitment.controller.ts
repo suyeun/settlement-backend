@@ -8,9 +8,8 @@ import { Readable } from 'stream';
 import { RecruitmentQueryDto } from './dto/recruitment-query.dto';
 import { ApiOperation, ApiOkResponse, ApiBearerAuth } from '@nestjs/swagger';
 
-@ApiBearerAuth('access-token')
+
 @Controller('recruitments')
-@UseGuards(JwtAuthGuard)
 export class RecruitmentController {
   constructor(private readonly recruitmentService: RecruitmentService) {}
 
