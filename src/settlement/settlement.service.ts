@@ -73,6 +73,8 @@ export class SettlementService {
   }
 
   async createBulk(settlements: CreateSettlementDto[]): Promise<Settlement[]> {
+    // 기존 데이터 모두 삭제
+    await this.settlementRepository.clear();
     const entities = settlements.map(dto => 
       this.settlementRepository.create({
         ...dto,

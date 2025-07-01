@@ -73,7 +73,21 @@ export class RecruitmentService {
     await this.recruitmentRepository.delete(id);
   }
 
-  async createBulk(recruitments: CreateRecruitmentDto[]): Promise<Recruitment[]> {
+  async createBulk(recruitments: CreateRecruitmentDto[], type: string): Promise<Recruitment[]> {
+    if (type === 'dispatch') {
+      const dispatch = await this.recruitmentRepository.find({ where: { type: 'dispatch' } });
+      if (dispatch.length > 0) {
+        await this.recruitmentRepository.delete({ type: 'dispatch' });
+      }
+    }
+
+    if (type === 'recruitment') {
+      const recruitment = await this.recruitmentRepository.find({ where: { type: 'recruitment' } });
+      if (recruitment.length > 0) {
+        await this.recruitmentRepository.delete({ type: 'recruitment' });
+      }
+    }
+    
     const entities = recruitments.map(dto =>
       this.recruitmentRepository.create({
         ...dto,

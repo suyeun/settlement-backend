@@ -105,7 +105,7 @@ export class RecruitmentController {
         })
         .on('end', async () => {
           try {
-            const saved = await this.recruitmentService.createBulk(results);
+            const saved = await this.recruitmentService.createBulk(results, 'dispatch');
             resolve({ message: 'CSV 업로드 성공', count: saved.length });
           } catch (error) {
             reject(error);
@@ -152,7 +152,7 @@ export class RecruitmentController {
         })
         .on('end', async () => {
           try {
-            const saved = await this.recruitmentService.createBulk(results);
+            const saved = await this.recruitmentService.createBulk(results, 'recruitment');
             resolve({ message: 'CSV 업로드 성공', count: saved.length });
           } catch (error) {
             reject(error);
