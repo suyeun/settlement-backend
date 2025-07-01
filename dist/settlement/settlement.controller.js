@@ -16,22 +16,58 @@ exports.SettlementController = void 0;
 const common_1 = require("@nestjs/common");
 const settlement_service_1 = require("./settlement.service");
 const create_settlement_dto_1 = require("./dto/create-settlement.dto");
-const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
+const swagger_1 = require("@nestjs/swagger");
+const recruitment_service_1 = require("../recruitment/recruitment.service");
 let SettlementController = class SettlementController {
-    constructor(settlementService) {
+    constructor(settlementService, recruitmentService) {
         this.settlementService = settlementService;
+        this.recruitmentService = recruitmentService;
     }
     create(createSettlementDto) {
         return this.settlementService.create(createSettlementDto);
     }
-    findAll(page = '1', limit = '10', search, startDate, endDate) {
-        return this.settlementService.findAll(parseInt(page), parseInt(limit), search, startDate, endDate);
+    findAll(query) {
+        const { page = 1, limit = 10, search, startDate, endDate, company } = query;
+        return this.settlementService.findAll(Number(page), Number(limit), search, startDate, endDate, company);
     }
     findOne(id) {
         return this.settlementService.findOne(+id);
     }
     remove(id) {
         return this.settlementService.remove(+id);
+    }
+    async getDashboardSummary() {
+        const settlements = await this.settlementService.findAll(1, 1000);
+        const dispatch = await this.recruitmentService.findAll(1, 1000, 'dispatch');
+        const recruitment = await this.recruitmentService.findAll(1, 1000, 'recruitment');
+        const monthMap = new Map();
+        settlements.data.forEach((item) => {
+            const m = item.settlementMonth;
+            if (!monthMap.has(m))
+                monthMap.set(m, { month: m, companyCount: 0, dispatchCount: 0, recruitCount: 0, revenue: 0, commission: 0 });
+            const row = monthMap.get(m);
+            row.companyCount += Number(item.companyCount || 0);
+            row.revenue += Number(item.billingAmount || 0);
+            row.commission += Number(item.settlementCommission || 0);
+        });
+        dispatch.data.forEach((item) => {
+            const m = item.settlementMonth;
+            if (!monthMap.has(m))
+                monthMap.set(m, { month: m, companyCount: 0, dispatchCount: 0, recruitCount: 0, revenue: 0, commission: 0 });
+            const row = monthMap.get(m);
+            row.dispatchCount += Number(item.employeeCount || 0);
+            row.commission += Number(item.settlementCommission || 0);
+        });
+        recruitment.data.forEach((item) => {
+            const m = item.settlementMonth;
+            if (!monthMap.has(m))
+                monthMap.set(m, { month: m, companyCount: 0, dispatchCount: 0, recruitCount: 0, revenue: 0, commission: 0 });
+            const row = monthMap.get(m);
+            row.recruitCount += Number(item.employeeCount || 0);
+            row.commission += Number(item.settlementCommission || 0);
+        });
+        const monthRows = Array.from(monthMap.values()).sort((a, b) => a.month.localeCompare(b.month));
+        return { data: monthRows };
     }
 };
 exports.SettlementController = SettlementController;
@@ -44,13 +80,37 @@ __decorate([
 ], SettlementController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)('page')),
-    __param(1, (0, common_1.Query)('limit')),
-    __param(2, (0, common_1.Query)('search')),
-    __param(3, (0, common_1.Query)('startDate')),
-    __param(4, (0, common_1.Query)('endDate')),
+    (0, swagger_1.ApiOperation)({ summary: '정산내역 목록 조회' }),
+    (0, swagger_1.ApiOkResponse)({
+        description: '정산내역 목록 응답',
+        schema: {
+            example: {
+                data: [
+                    {
+                        id: 1,
+                        settlementMonth: '2024-03',
+                        companyCount: 2,
+                        employeeCount: 3,
+                        billingAmount: 7899500,
+                        commission: 492560,
+                        depositDate: '2024-04-10',
+                        settlementCommission: 123140,
+                        note: '정산일자',
+                        amount: 123140,
+                        settlementDate: '2024-02-29',
+                        createdAt: '2024-04-11T12:34:56.000Z',
+                        updatedAt: '2024-04-11T12:34:56.000Z'
+                    }
+                ],
+                total: 1,
+                page: 1,
+                limit: 10
+            }
+        }
+    }),
+    __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String, String, String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], SettlementController.prototype, "findAll", null);
 __decorate([
@@ -67,9 +127,15 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], SettlementController.prototype, "remove", null);
+__decorate([
+    (0, common_1.Get)('/dashboard/summary'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], SettlementController.prototype, "getDashboardSummary", null);
 exports.SettlementController = SettlementController = __decorate([
     (0, common_1.Controller)('settlements'),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    __metadata("design:paramtypes", [settlement_service_1.SettlementService])
+    __metadata("design:paramtypes", [settlement_service_1.SettlementService,
+        recruitment_service_1.RecruitmentService])
 ], SettlementController);
 //# sourceMappingURL=settlement.controller.js.map

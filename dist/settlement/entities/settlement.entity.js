@@ -19,51 +19,51 @@ __decorate([
     __metadata("design:type", Number)
 ], Settlement.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'settlement_month', type: 'varchar', length: 7, comment: '정산 월 (YYYY-MM)' }),
+    (0, typeorm_1.Column)({ name: 'settlement_month', type: 'varchar', length: 7, comment: '정산 월 (YYYY-MM)', nullable: true }),
     __metadata("design:type", String)
 ], Settlement.prototype, "settlementMonth", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'company_count', type: 'int', comment: '업체수' }),
+    (0, typeorm_1.Column)({ name: 'company_count', type: 'int', comment: '업체수', nullable: true }),
     __metadata("design:type", Number)
 ], Settlement.prototype, "companyCount", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'employee_count', type: 'int', comment: '인원수' }),
+    (0, typeorm_1.Column)({ name: 'employee_count', type: 'int', comment: '인원수', nullable: true }),
     __metadata("design:type", Number)
 ], Settlement.prototype, "employeeCount", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'billing_amount', type: 'decimal', precision: 15, scale: 2, comment: '청구금액' }),
+    (0, typeorm_1.Column)({ name: 'billing_amount', type: 'decimal', precision: 15, scale: 2, comment: '청구금액', nullable: true }),
     __metadata("design:type", Number)
 ], Settlement.prototype, "billingAmount", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'commission', type: 'decimal', precision: 15, scale: 2, comment: '수수료' }),
+    (0, typeorm_1.Column)({ name: 'commission', type: 'decimal', precision: 15, scale: 2, comment: '수수료', nullable: true }),
     __metadata("design:type", Number)
 ], Settlement.prototype, "commission", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'deposit_date', type: 'date', nullable: true, comment: '입금일자' }),
+    (0, typeorm_1.Column)({ name: 'deposit_date', type: 'date', nullable: true, comment: '입금일자', default: null }),
     __metadata("design:type", Date)
 ], Settlement.prototype, "depositDate", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'settlement_commission', type: 'decimal', precision: 15, scale: 2, comment: '정산 수수료' }),
+    (0, typeorm_1.Column)({ name: 'settlement_commission', type: 'decimal', precision: 15, scale: 2, comment: '정산 수수료', nullable: true }),
     __metadata("design:type", Number)
 ], Settlement.prototype, "settlementCommission", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'note', type: 'text', nullable: true, comment: '비고' }),
+    (0, typeorm_1.Column)({ name: 'note', type: 'text', nullable: true, comment: '비고', default: null }),
     __metadata("design:type", String)
 ], Settlement.prototype, "note", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'amount', type: 'decimal', precision: 15, scale: 2, comment: '금액' }),
+    (0, typeorm_1.Column)({ name: 'amount', type: 'decimal', precision: 15, scale: 2, comment: '금액', nullable: true }),
     __metadata("design:type", Number)
 ], Settlement.prototype, "amount", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ name: 'settlement_date', type: 'date', nullable: true, comment: '정산일자' }),
+    (0, typeorm_1.Column)({ name: 'settlement_date', type: 'date', nullable: true, comment: '정산일자', default: null }),
     __metadata("design:type", Date)
 ], Settlement.prototype, "settlementDate", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
+    (0, typeorm_1.CreateDateColumn)({ name: 'created_at', default: null }),
     __metadata("design:type", Date)
 ], Settlement.prototype, "createdAt", void 0);
 __decorate([
-    (0, typeorm_1.UpdateDateColumn)({ name: 'updated_at' }),
+    (0, typeorm_1.UpdateDateColumn)({ name: 'updated_at', default: null }),
     __metadata("design:type", Date)
 ], Settlement.prototype, "updatedAt", void 0);
 exports.Settlement = Settlement = __decorate([

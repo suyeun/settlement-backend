@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RecruitmentService = void 0;
 const common_1 = require("@nestjs/common");
@@ -30,9 +31,21 @@ let RecruitmentService = class RecruitmentService {
         });
         return this.recruitmentRepository.save(recruitment);
     }
-    async findAll(page = 1, limit = 10, search) {
+    async findAll(page = 1, limit = 10, search, dateRange, company, type) {
         const skip = (page - 1) * limit;
         const queryBuilder = this.recruitmentRepository.createQueryBuilder('recruitment');
+        if (type) {
+            queryBuilder.andWhere('recruitment.type = :type', { type });
+        }
+        if (company && company !== '전체업체') {
+            queryBuilder.andWhere('recruitment.clientName = :company', { company });
+        }
+        if (dateRange && dateRange[0] && dateRange[1]) {
+            queryBuilder.andWhere('recruitment.settlementMonth BETWEEN :start AND :end', {
+                start: dateRange[0],
+                end: dateRange[1],
+            });
+        }
         if (search) {
             queryBuilder.andWhere('(recruitment.settlementMonth ILIKE :search OR recruitment.clientName ILIKE :search OR recruitment.note ILIKE :search)', { search: `%${search}%` });
         }
@@ -68,6 +81,6 @@ exports.RecruitmentService = RecruitmentService;
 exports.RecruitmentService = RecruitmentService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(recruitment_entity_1.Recruitment)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object])
 ], RecruitmentService);
 //# sourceMappingURL=recruitment.service.js.map

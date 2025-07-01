@@ -12,12 +12,14 @@ const typeorm_1 = require("@nestjs/typeorm");
 const settlement_service_1 = require("./settlement.service");
 const settlement_controller_1 = require("./settlement.controller");
 const settlement_entity_1 = require("./entities/settlement.entity");
+const tax_invoice_module_1 = require("./tax-invoice.module");
+const recruitment_module_1 = require("../recruitment/recruitment.module");
 let SettlementModule = class SettlementModule {
 };
 exports.SettlementModule = SettlementModule;
 exports.SettlementModule = SettlementModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([settlement_entity_1.Settlement])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([settlement_entity_1.Settlement]), tax_invoice_module_1.TaxInvoiceModule, recruitment_module_1.RecruitmentModule],
         controllers: [settlement_controller_1.SettlementController],
         providers: [settlement_service_1.SettlementService],
         exports: [settlement_service_1.SettlementService],

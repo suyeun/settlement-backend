@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SettlementService = void 0;
 const common_1 = require("@nestjs/common");
@@ -29,7 +30,7 @@ let SettlementService = class SettlementService {
         });
         return this.settlementRepository.save(settlement);
     }
-    async findAll(page = 1, limit = 10, search, startDate, endDate) {
+    async findAll(page = 1, limit = 10, search, startDate, endDate, company) {
         const skip = (page - 1) * limit;
         const queryBuilder = this.settlementRepository.createQueryBuilder('settlement');
         if (search) {
@@ -37,6 +38,9 @@ let SettlementService = class SettlementService {
         }
         if (startDate && endDate) {
             queryBuilder.andWhere('settlement.settlementDate BETWEEN :startDate AND :endDate', { startDate, endDate });
+        }
+        if (company && company !== '전체업체') {
+            queryBuilder.andWhere('settlement.companyName = :company', { company });
         }
         queryBuilder
             .orderBy('settlement.createdAt', 'DESC')
@@ -69,6 +73,6 @@ exports.SettlementService = SettlementService;
 exports.SettlementService = SettlementService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(settlement_entity_1.Settlement)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __metadata("design:paramtypes", [typeof (_a = typeof typeorm_2.Repository !== "undefined" && typeorm_2.Repository) === "function" ? _a : Object])
 ], SettlementService);
 //# sourceMappingURL=settlement.service.js.map

@@ -1,10 +1,12 @@
 import { SettlementService } from './settlement.service';
 import { CreateSettlementDto } from './dto/create-settlement.dto';
+import { RecruitmentService } from '../recruitment/recruitment.service';
 export declare class SettlementController {
     private readonly settlementService;
-    constructor(settlementService: SettlementService);
+    private readonly recruitmentService;
+    constructor(settlementService: SettlementService, recruitmentService: RecruitmentService);
     create(createSettlementDto: CreateSettlementDto): Promise<import("./entities/settlement.entity").Settlement>;
-    findAll(page?: string, limit?: string, search?: string, startDate?: string, endDate?: string): Promise<{
+    findAll(query: any): Promise<{
         data: import("./entities/settlement.entity").Settlement[];
         total: number;
         page: number;
@@ -12,4 +14,7 @@ export declare class SettlementController {
     }>;
     findOne(id: string): Promise<import("./entities/settlement.entity").Settlement>;
     remove(id: string): Promise<void>;
+    getDashboardSummary(): Promise<{
+        data: any[];
+    }>;
 }

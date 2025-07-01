@@ -35,7 +35,7 @@ __decorate([
     __metadata("design:type", Boolean)
 ], User.prototype, "isActive", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', length: 10, default: 'user', comment: '권한 (admin, user)' }),
+    (0, typeorm_1.Column)({ name: 'role', type: 'varchar', length: 20, default: 'user', comment: '사용자 권한(admin, user)' }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([

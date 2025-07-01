@@ -11,4 +11,5 @@ export declare class CreateRecruitmentDto {
     settlementCommission: number;
     settlementDate?: string;
     note?: string;
+    type: string;
 }

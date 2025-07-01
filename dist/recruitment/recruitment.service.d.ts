@@ -5,7 +5,7 @@ export declare class RecruitmentService {
     private recruitmentRepository;
     constructor(recruitmentRepository: Repository<Recruitment>);
     create(createRecruitmentDto: CreateRecruitmentDto): Promise<Recruitment>;
-    findAll(page?: number, limit?: number, search?: string): Promise<{
+    findAll(page?: number, limit?: number, search?: string, dateRange?: [string, string], company?: string, type?: string): Promise<{
         data: Recruitment[];
         total: number;
         page: number;

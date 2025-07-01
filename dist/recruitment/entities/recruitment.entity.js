@@ -67,6 +67,10 @@ __decorate([
     __metadata("design:type", String)
 ], Recruitment.prototype, "note", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ name: 'type', type: 'varchar', length: 20, comment: '구분(파견/채용대행)' }),
+    __metadata("design:type", String)
+], Recruitment.prototype, "type", void 0);
+__decorate([
     (0, typeorm_1.CreateDateColumn)({ name: 'created_at' }),
     __metadata("design:type", Date)
 ], Recruitment.prototype, "createdAt", void 0);

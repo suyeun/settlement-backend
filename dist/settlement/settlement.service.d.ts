@@ -5,7 +5,7 @@ export declare class SettlementService {
     private settlementRepository;
     constructor(settlementRepository: Repository<Settlement>);
     create(createSettlementDto: CreateSettlementDto): Promise<Settlement>;
-    findAll(page?: number, limit?: number, search?: string, startDate?: string, endDate?: string): Promise<{
+    findAll(page?: number, limit?: number, search?: string, startDate?: string, endDate?: string, company?: string): Promise<{
         data: Settlement[];
         total: number;
         page: number;

@@ -4,7 +4,7 @@ export declare class User {
     password: string;
     name: string;
     isActive: boolean;
-    role: 'admin' | 'user';
+    role: string;
     createdAt: Date;
     updatedAt: Date;
 }

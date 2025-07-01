@@ -20,7 +20,7 @@ exports.RecruitmentModule = RecruitmentModule = __decorate([
         imports: [typeorm_1.TypeOrmModule.forFeature([recruitment_entity_1.Recruitment])],
         controllers: [recruitment_controller_1.RecruitmentController],
         providers: [recruitment_service_1.RecruitmentService],
-        exports: [recruitment_service_1.RecruitmentService],
+        exports: [recruitment_service_1.RecruitmentService, typeorm_1.TypeOrmModule],
     })
 ], RecruitmentModule);
 //# sourceMappingURL=recruitment.module.js.map

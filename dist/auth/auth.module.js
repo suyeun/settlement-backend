@@ -24,7 +24,7 @@ exports.AuthModule = AuthModule = __decorate([
             typeorm_1.TypeOrmModule.forFeature([user_entity_1.User]),
             passport_1.PassportModule,
             jwt_1.JwtModule.register({
-                secret: process.env.JWT_SECRET || 'secretKey',
+                secret: process.env.JWT_SECRET || 'qweoiup',
                 signOptions: { expiresIn: '24h' },
             }),
         ],

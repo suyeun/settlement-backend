@@ -12,6 +12,7 @@ export declare class Recruitment {
     settlementCommission: number;
     settlementDate: Date;
     note: string;
+    type: string;
     createdAt: Date;
     updatedAt: Date;
 }
