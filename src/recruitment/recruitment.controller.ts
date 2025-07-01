@@ -8,7 +8,7 @@ import { Readable } from 'stream';
 import { RecruitmentQueryDto } from './dto/recruitment-query.dto';
 import { ApiOperation, ApiOkResponse, ApiBearerAuth } from '@nestjs/swagger';
 
-
+@UseGuards(JwtAuthGuard)
 @Controller('recruitments')
 export class RecruitmentController {
   constructor(private readonly recruitmentService: RecruitmentService) {}
@@ -118,6 +118,7 @@ export class RecruitmentController {
   }
 
   @Post('upload-csv/recruitment')
+  @UseGuards(JwtAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   async uploadRecruitmentCsv(@UploadedFile() file: Express.Multer.File) {
     if (!file) {

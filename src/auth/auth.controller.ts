@@ -24,6 +24,7 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('me')
   getMe(@Request() req) {
     return req.user;
