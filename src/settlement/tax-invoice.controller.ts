@@ -8,6 +8,7 @@ import { Readable } from 'stream';
 import { diskStorage } from 'multer';
 import * as path from 'path';
 import * as fs from 'fs';
+import { v4 as uuidv4 } from 'uuid';
 
 @Controller('tax-invoices')
 export class TaxInvoiceController {
@@ -94,7 +95,7 @@ export class TaxInvoiceController {
       filename: (req, file, cb) => {
         const ext = path.extname(file.originalname);
         const basename = path.basename(file.originalname, ext);
-        cb(null, `${basename}-${Date.now()}${ext}`);
+        cb(null, `${uuidv4()}${ext}`);
       },
     }),
     fileFilter: (req, file, cb) => {
