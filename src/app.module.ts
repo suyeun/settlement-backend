@@ -5,15 +5,9 @@ import { AuthModule } from './auth/auth.module';
 import { SettlementModule } from './settlement/settlement.module';
 import { UploadModule } from './upload/upload.module';
 import { RecruitmentModule } from './recruitment/recruitment.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 
 @Module({
   imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', 'uploads'), // 실제 uploads 폴더 경로
-      serveRoot: '/uploads', // URL prefix
-    }),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
