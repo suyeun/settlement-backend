@@ -86,7 +86,7 @@ export class TaxInvoiceController {
     storage: diskStorage({
       destination: (req, file, cb) => {
         const { year, month } = req.query;
-        const dir = path.join(__dirname, '../../../uploads/tax-invoice', `${year}-${month}`);
+        const dir = path.join(__dirname, '..', '..', 'uploads', 'tax-invoice', `${year}-${month}`);
         console.log('이미지 저장 경로:', dir);
         if (!fs.existsSync(dir)) {
           fs.mkdirSync(dir, { recursive: true });
