@@ -43,9 +43,7 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api-docs', app, document);
-
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
-
   await app.listen(process.env.PORT || 3001);
   
   console.log('백엔드 서버가 http://localhost:3001에서 실행중입니다.');
