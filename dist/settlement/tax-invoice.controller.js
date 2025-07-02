@@ -24,6 +24,7 @@ const stream_1 = require("stream");
 const multer_1 = require("multer");
 const path = require("path");
 const fs = require("fs");
+const uuid_1 = require("uuid");
 let TaxInvoiceController = class TaxInvoiceController {
     constructor(taxInvoiceService) {
         this.taxInvoiceService = taxInvoiceService;
@@ -178,7 +179,7 @@ __decorate([
             filename: (req, file, cb) => {
                 const ext = path.extname(file.originalname);
                 const basename = path.basename(file.originalname, ext);
-                cb(null, `${basename}-${Date.now()}${ext}`);
+                cb(null, `${(0, uuid_1.v4)()}${ext}`);
             },
         }),
         fileFilter: (req, file, cb) => {

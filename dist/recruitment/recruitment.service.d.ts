@@ -13,5 +13,5 @@ export declare class RecruitmentService {
     }>;
     findOne(id: number): Promise<Recruitment>;
     remove(id: number): Promise<void>;
-    createBulk(recruitments: CreateRecruitmentDto[]): Promise<Recruitment[]>;
+    createBulk(recruitments: CreateRecruitmentDto[], type: string): Promise<Recruitment[]>;
 }

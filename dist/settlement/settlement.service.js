@@ -61,6 +61,7 @@ let SettlementService = class SettlementService {
         await this.settlementRepository.delete(id);
     }
     async createBulk(settlements) {
+        await this.settlementRepository.clear();
         const entities = settlements.map(dto => this.settlementRepository.create({
             ...dto,
             depositDate: dto.depositDate ? new Date(dto.depositDate) : null,
