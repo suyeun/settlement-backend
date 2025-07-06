@@ -1,6 +1,7 @@
 import { Controller, Post, Body, Get, UseGuards, Request, Patch, Param, Delete, ForbiddenException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { RegisterDto } from './dto/register.dto';
 
@@ -38,8 +39,8 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Patch('users/:id')
-  async updateUser(@Param('id') id: string, @Body() body: any, @Request() req) {
-    if (req.user.role !== 'admin') throw new ForbiddenException('권한이 없습니다.');
+  async updateUser(@Param('id') id: string, @Body() body: UpdateUserDto, @Request() req) {
+    //if (req.user.role !== 'admin') throw new ForbiddenException('권한이 없습니다.');
     return this.authService.updateUser(Number(id), body);
   }
 
