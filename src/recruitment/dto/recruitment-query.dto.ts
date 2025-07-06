@@ -9,4 +9,7 @@ export class RecruitmentQueryDto {
 
   @ApiPropertyOptional({ example: 'ABC기업', description: '검색어(거래처명, 정산 월 등)' })
   search?: string;
+
+  @ApiPropertyOptional({ example: 'dispatch', description: '구분(파견: dispatch, 채용대행: recruitment)' })
+  type?: string;
 } 
