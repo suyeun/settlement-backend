@@ -15,7 +15,6 @@ export class RecruitmentService {
     const recruitment = this.recruitmentRepository.create({
       ...createRecruitmentDto,
       depositDate: createRecruitmentDto.depositDate ? new Date(createRecruitmentDto.depositDate) : null,
-      taxInvoiceDate: createRecruitmentDto.taxInvoiceDate ? new Date(createRecruitmentDto.taxInvoiceDate) : null,
       settlementDate: createRecruitmentDto.settlementDate ? new Date(createRecruitmentDto.settlementDate) : null,
     });
     return this.recruitmentRepository.save(recruitment);

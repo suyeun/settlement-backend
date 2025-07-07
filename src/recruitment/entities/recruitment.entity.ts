@@ -29,9 +29,6 @@ export class Recruitment {
   @Column({ name: 'deposit_date', type: 'date', nullable: true, comment: '입금일자' })
   depositDate: Date;
 
-  @Column({ name: 'tax_invoice_date', type: 'date', nullable: true, comment: '세금계산서 발행일' })
-  taxInvoiceDate: Date;
-
   @Column({ name: 'settlement_commission', type: 'decimal', precision: 15, scale: 2, comment: '정산 수수료' })
   settlementCommission: number;
 

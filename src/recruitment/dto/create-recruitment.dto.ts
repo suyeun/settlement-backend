@@ -37,11 +37,6 @@ export class CreateRecruitmentDto {
   @IsDateString()
   depositDate?: string;
 
-  @ApiProperty({ example: '2024-04-15', description: '세금계산서 발행일', required: false })
-  @IsOptional()
-  @IsDateString()
-  taxInvoiceDate?: string;
-
   @ApiProperty({ example: 123140, description: '정산 수수료' })
   @IsNumber()
   settlementCommission: number;
