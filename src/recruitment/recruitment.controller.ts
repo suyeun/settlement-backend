@@ -38,7 +38,6 @@ export class RecruitmentController {
             commissionStandard: '기본',
             billingPeriod: '2024-03-01~2024-03-31',
             depositDate: '2024-04-10',
-            taxInvoiceDate: '2024-04-15',
             settlementCommission: 123140,
             settlementDate: '2024-02-29',
             note: '비고 예시',

@@ -91,8 +91,8 @@ export class RecruitmentService {
       this.recruitmentRepository.create({
         ...dto,
         depositDate: dto.depositDate ? new Date(dto.depositDate) : null,
-        taxInvoiceDate: dto.taxInvoiceDate ? new Date(dto.taxInvoiceDate) : null,
         settlementDate: dto.settlementDate ? new Date(dto.settlementDate) : null,
+        type,
       })
     );
     return this.recruitmentRepository.save(entities);
