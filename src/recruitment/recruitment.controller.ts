@@ -7,6 +7,9 @@ import * as csvParser from 'csv-parser';
 import { Readable } from 'stream';
 import { RecruitmentQueryDto } from './dto/recruitment-query.dto';
 import { ApiOperation, ApiOkResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { diskStorage } from 'multer';
+import * as path from 'path';
+import * as fs from 'fs';
 
 @UseGuards(JwtAuthGuard)
 @Controller('recruitments')
@@ -160,5 +163,34 @@ export class RecruitmentController {
           reject(error);
         });
     });
+  }
+
+  @Post('upload-image/:id')
+  @UseInterceptors(FileInterceptor('file', {
+    storage: diskStorage({
+      destination: (req, file, callback) => {
+        const uploadPath = path.join(process.cwd(), 'uploads');
+        if (!fs.existsSync(uploadPath)) {
+          fs.mkdirSync(uploadPath, { recursive: true });
+        }
+        callback(null, uploadPath);
+      },
+      filename: (req, file, callback) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const ext = path.extname(file.originalname);
+        callback(null, `recruitment-${uniqueSuffix}${ext}`);
+      },
+    }),
+  }))
+  async uploadImage(@Param('id') id: string, @UploadedFile() file: Express.Multer.File) {
+    const imagePath = `/uploads/${file.filename}`;
+    await this.recruitmentService.updateImagePath(+id, imagePath);
+    return { message: '이미지가 업로드되었습니다.', imagePath };
+  }
+
+  @Delete('image/:id')
+  async deleteImage(@Param('id') id: string) {
+    await this.recruitmentService.deleteImage(+id);
+    return { message: '이미지가 삭제되었습니다.' };
   }
 } 

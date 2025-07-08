@@ -97,4 +97,23 @@ export class RecruitmentService {
     );
     return this.recruitmentRepository.save(entities);
   }
+
+  async updateImagePath(id: number, imagePath: string): Promise<void> {
+    await this.recruitmentRepository.update(id, { imagePath });
+  }
+
+  async deleteImage(id: number): Promise<void> {
+    const recruitment = await this.recruitmentRepository.findOne({ where: { id } });
+    if (recruitment?.imagePath) {
+      // 파일 시스템에서 이미지 파일 삭제
+      const fs = require('fs');
+      const path = require('path');
+      const filePath = path.join(process.cwd(), recruitment.imagePath);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+      // DB에서 이미지 경로 제거
+      await this.recruitmentRepository.update(id, { imagePath: null });
+    }
+  }
 } 

@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { SettlementModule } from './settlement/settlement.module';
 import { UploadModule } from './upload/upload.module';
 import { RecruitmentModule } from './recruitment/recruitment.module';
 
@@ -22,7 +21,6 @@ import { RecruitmentModule } from './recruitment/recruitment.module';
       synchronize: true, // 개발환경에서만 사용
     }),
     AuthModule,
-    SettlementModule,
     UploadModule,
     RecruitmentModule,
   ],

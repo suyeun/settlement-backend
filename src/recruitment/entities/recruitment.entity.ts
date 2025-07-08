@@ -41,9 +41,15 @@ export class Recruitment {
   @Column({ name: 'type', type: 'varchar', length: 20, comment: '구분(파견/채용대행)' })
   type: string;
 
+  @Column({ name: 'image_path', type: 'varchar', length: 255, nullable: true, comment: '이미지 파일 경로' })
+  imagePath: string;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @Column({ name: 'is_deleted', type: 'boolean', default: false, comment: '삭제 여부' })
+  isDeleted: boolean;
 } 
