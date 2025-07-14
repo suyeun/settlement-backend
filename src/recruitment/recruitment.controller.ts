@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Param, Delete, Query, UseGuards, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Query, UseGuards, UploadedFile, UseInterceptors, Put } from '@nestjs/common';
 import { RecruitmentService } from './recruitment.service';
 import { CreateRecruitmentDto } from './dto/create-recruitment.dto';
+import { UpdateRecruitmentDto } from './dto/update-recruitment.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import * as csvParser from 'csv-parser';
@@ -66,6 +67,11 @@ export class RecruitmentController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.recruitmentService.findOne(+id);
+  }
+
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateRecruitmentDto: UpdateRecruitmentDto) {
+    return this.recruitmentService.update(+id, updateRecruitmentDto);
   }
 
   @Delete(':id')

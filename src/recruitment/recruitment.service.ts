@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Recruitment } from './entities/recruitment.entity';
 import { CreateRecruitmentDto } from './dto/create-recruitment.dto';
+import { UpdateRecruitmentDto } from './dto/update-recruitment.dto';
 
 @Injectable()
 export class RecruitmentService {
@@ -66,6 +67,25 @@ export class RecruitmentService {
 
   async findOne(id: number): Promise<Recruitment> {
     return this.recruitmentRepository.findOne({ where: { id } });
+  }
+
+  async update(id: number, updateRecruitmentDto: UpdateRecruitmentDto): Promise<Recruitment> {
+    const recruitment = await this.findOne(id);
+    if (!recruitment) {
+      throw new Error('해당 ID의 데이터를 찾을 수 없습니다.');
+    }
+
+    const updatedData: any = { ...updateRecruitmentDto };
+    
+    if (updateRecruitmentDto.depositDate) {
+      updatedData.depositDate = new Date(updateRecruitmentDto.depositDate);
+    }
+    if (updateRecruitmentDto.settlementDate) {
+      updatedData.settlementDate = new Date(updateRecruitmentDto.settlementDate);
+    }
+
+    await this.recruitmentRepository.update(id, updatedData);
+    return this.findOne(id);
   }
 
   async remove(id: number): Promise<void> {
