@@ -1,4 +1,5 @@
 import { IsString, IsNumber, IsOptional, IsDateString } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateRecruitmentDto {
@@ -11,14 +12,17 @@ export class CreateRecruitmentDto {
   clientName: string;
 
   @ApiProperty({ example: 3, description: '인원수' })
+  @Transform(({ value }) => Number(value))
   @IsNumber()
   employeeCount: number;
 
   @ApiProperty({ example: 7899500, description: '청구금액' })
+  @Transform(({ value }) => Number(value))
   @IsNumber()
   billingAmount: number;
 
   @ApiProperty({ example: 492560, description: '수수료' })
+  @Transform(({ value }) => Number(value))
   @IsNumber()
   commission: number;
 
@@ -38,6 +42,7 @@ export class CreateRecruitmentDto {
   depositDate?: string;
 
   @ApiProperty({ example: 123140, description: '정산 수수료' })
+  @Transform(({ value }) => Number(value))
   @IsNumber()
   settlementCommission: number;
 

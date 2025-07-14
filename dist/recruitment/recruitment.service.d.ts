@@ -1,6 +1,7 @@
 import { Repository } from 'typeorm';
 import { Recruitment } from './entities/recruitment.entity';
 import { CreateRecruitmentDto } from './dto/create-recruitment.dto';
+import { UpdateRecruitmentDto } from './dto/update-recruitment.dto';
 export declare class RecruitmentService {
     private recruitmentRepository;
     constructor(recruitmentRepository: Repository<Recruitment>);
@@ -12,6 +13,7 @@ export declare class RecruitmentService {
         limit: number;
     }>;
     findOne(id: number): Promise<Recruitment>;
+    update(id: number, updateRecruitmentDto: UpdateRecruitmentDto): Promise<Recruitment>;
     remove(id: number): Promise<void>;
     createBulk(recruitments: CreateRecruitmentDto[], type: string): Promise<Recruitment[]>;
     updateImagePath(id: number, imagePath: string): Promise<void>;

@@ -62,6 +62,21 @@ let RecruitmentService = class RecruitmentService {
     async findOne(id) {
         return this.recruitmentRepository.findOne({ where: { id } });
     }
+    async update(id, updateRecruitmentDto) {
+        const recruitment = await this.findOne(id);
+        if (!recruitment) {
+            throw new Error('해당 ID의 데이터를 찾을 수 없습니다.');
+        }
+        const updatedData = { ...updateRecruitmentDto };
+        if (updateRecruitmentDto.depositDate) {
+            updatedData.depositDate = new Date(updateRecruitmentDto.depositDate);
+        }
+        if (updateRecruitmentDto.settlementDate) {
+            updatedData.settlementDate = new Date(updateRecruitmentDto.settlementDate);
+        }
+        await this.recruitmentRepository.update(id, updatedData);
+        return this.findOne(id);
+    }
     async remove(id) {
         await this.recruitmentRepository.delete(id);
     }

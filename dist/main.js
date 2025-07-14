@@ -17,7 +17,11 @@ async function bootstrap() {
         allowedHeaders: 'Content-Type,Accept,Authorization',
         credentials: false,
     });
-    app.useGlobalPipes(new common_1.ValidationPipe());
+    app.useGlobalPipes(new common_1.ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+    }));
     const config = new swagger_1.DocumentBuilder()
         .setTitle('API')
         .setDescription('CATCH12 API 문서')

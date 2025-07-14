@@ -22,7 +22,11 @@ async function bootstrap() {
 
 
   // Validation Pipe 글로벌 설정
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ 
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: true,
+  }));
 
   // Swagger 설정
   const config = new DocumentBuilder()

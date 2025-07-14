@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateRecruitmentDto = void 0;
 const class_validator_1 = require("class-validator");
+const class_transformer_1 = require("class-transformer");
 const swagger_1 = require("@nestjs/swagger");
 class CreateRecruitmentDto {
 }
@@ -27,16 +28,19 @@ __decorate([
 ], CreateRecruitmentDto.prototype, "clientName", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 3, description: '인원수' }),
+    (0, class_transformer_1.Transform)(({ value }) => Number(value)),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateRecruitmentDto.prototype, "employeeCount", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 7899500, description: '청구금액' }),
+    (0, class_transformer_1.Transform)(({ value }) => Number(value)),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateRecruitmentDto.prototype, "billingAmount", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 492560, description: '수수료' }),
+    (0, class_transformer_1.Transform)(({ value }) => Number(value)),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateRecruitmentDto.prototype, "commission", void 0);
@@ -60,6 +64,7 @@ __decorate([
 ], CreateRecruitmentDto.prototype, "depositDate", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 123140, description: '정산 수수료' }),
+    (0, class_transformer_1.Transform)(({ value }) => Number(value)),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
 ], CreateRecruitmentDto.prototype, "settlementCommission", void 0);

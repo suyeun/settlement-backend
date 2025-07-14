@@ -1,5 +1,6 @@
 import { RecruitmentService } from './recruitment.service';
 import { CreateRecruitmentDto } from './dto/create-recruitment.dto';
+import { UpdateRecruitmentDto } from './dto/update-recruitment.dto';
 export declare class RecruitmentController {
     private readonly recruitmentService;
     constructor(recruitmentService: RecruitmentService);
@@ -11,6 +12,7 @@ export declare class RecruitmentController {
         limit: number;
     }>;
     findOne(id: string): Promise<import("./entities/recruitment.entity").Recruitment>;
+    update(id: string, updateRecruitmentDto: UpdateRecruitmentDto): Promise<import("./entities/recruitment.entity").Recruitment>;
     remove(id: string): Promise<void>;
     uploadDispatchCsv(file: Express.Multer.File): Promise<unknown>;
     uploadRecruitmentCsv(file: Express.Multer.File): Promise<unknown>;
