@@ -138,26 +138,25 @@ export class RecruitmentService {
   }
 
   async getCompanies(type?: string): Promise<string[]> {
-    console.log('getCompanies 호출됨 - type:', type); // 디버깅용
+    console.log('getCompanies 호출됨 - type:', type);
     
     const queryBuilder = this.recruitmentRepository.createQueryBuilder('recruitment');
-    
-    if (type) {
-      queryBuilder.andWhere('recruitment.type = :type', { type });
-      console.log('type 조건 추가됨:', type); // 디버깅용
-    }
     
     queryBuilder
       .select('DISTINCT recruitment.clientName', 'clientName')
       .where('recruitment.clientName IS NOT NULL')
       .andWhere('recruitment.clientName != :empty', { empty: '' });
+    
+    if (type) {
+      queryBuilder.andWhere('recruitment.type = :type', { type });
+      console.log('type 조건 추가됨:', type);
+    }
       
-    // 실제 실행되는 SQL 쿼리 확인
     console.log('실행될 SQL:', queryBuilder.getSql());
     console.log('파라미터:', queryBuilder.getParameters());
 
     const result = await queryBuilder.getRawMany();
-    console.log('조회 결과 개수:', result.length); // 디버깅용
+    console.log('조회 결과 개수:', result.length);
     
     const companies = result.map(item => item.clientName);
     return companies;
