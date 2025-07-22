@@ -147,8 +147,8 @@ export class RecruitmentService {
     queryBuilder
       .select('DISTINCT recruitment.clientName', 'clientName')
       .where('recruitment.clientName IS NOT NULL')
-      .andWhere('recruitment.clientName != :empty', { empty: '' })
-      .orderBy('recruitment.clientName', 'ASC');
+      .andWhere('recruitment.clientName != :empty', { empty: '' });
+      // ORDER BY 제거
 
     const result = await queryBuilder.getRawMany();
     return result.map(item => item.clientName);
