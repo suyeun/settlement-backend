@@ -22,6 +22,12 @@ export class RecruitmentController {
     return this.recruitmentService.create(createRecruitmentDto);
   }
 
+  @Get('companies')
+  @ApiOperation({ summary: '업체 목록 조회' })
+  getCompanies(@Query('type') type?: string) {
+    return this.recruitmentService.getCompanies(type);
+  }
+
   @Get()
   @ApiOperation({ summary: '채용대행 목록 조회' })
   @ApiOkResponse({

@@ -137,4 +137,21 @@ export class RecruitmentService {
       await this.recruitmentRepository.update(id, { imagePath: null });
     }
   }
+
+  async getCompanies(type?: string): Promise<string[]> {
+    const queryBuilder = this.recruitmentRepository.createQueryBuilder('recruitment');
+    
+    if (type) {
+      queryBuilder.andWhere('recruitment.type = :type', { type });
+    }
+    
+    queryBuilder
+      .select('DISTINCT recruitment.clientName', 'clientName')
+      .where('recruitment.clientName IS NOT NULL')
+      .andWhere('recruitment.clientName != :empty', { empty: '' })
+      .orderBy('recruitment.clientName', 'ASC');
+
+    const result = await queryBuilder.getRawMany();
+    return result.map(item => item.clientName);
+  }
 } 
