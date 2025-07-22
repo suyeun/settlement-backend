@@ -174,6 +174,7 @@ export class RecruitmentController {
   @UseInterceptors(FileInterceptor('file', {
     storage: diskStorage({
       destination: (req, file, callback) => {
+        console.log(req, file);
         const uploadPath = path.join(process.cwd(), 'uploads');
         if (!fs.existsSync(uploadPath)) {
           fs.mkdirSync(uploadPath, { recursive: true });
