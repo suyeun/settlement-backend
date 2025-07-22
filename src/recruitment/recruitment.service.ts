@@ -51,7 +51,8 @@ export class RecruitmentService {
       );
     }
     queryBuilder
-      .orderBy('recruitment.createdAt', 'DESC')
+      .orderBy('recruitment.settlementMonth', 'DESC')
+      .addOrderBy('recruitment.createdAt', 'DESC')
       .skip(skip)
       .take(limit);
 
