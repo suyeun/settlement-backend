@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { Recruitment } from './entities/recruitment.entity';
 import { CreateRecruitmentDto } from './dto/create-recruitment.dto';
 import { UpdateRecruitmentDto } from './dto/update-recruitment.dto';
-
 @Injectable()
 export class RecruitmentService {
   constructor(
