@@ -151,9 +151,6 @@ export class RecruitmentService {
       queryBuilder.andWhere('recruitment.type = :type', { type });
       console.log('type 조건 추가됨:', type);
     }
-      
-    console.log('실행될 SQL:', queryBuilder.getSql());
-    console.log('파라미터:', queryBuilder.getParameters());
 
     const result = await queryBuilder.getRawMany();
     console.log('조회 결과 개수:', result.length);
