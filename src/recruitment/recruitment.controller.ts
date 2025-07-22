@@ -205,4 +205,10 @@ export class RecruitmentController {
     await this.recruitmentService.deleteImage(+id);
     return { message: '이미지가 삭제되었습니다.' };
   }
+
+  @Get('debug-types')
+  @ApiOperation({ summary: '타입별 데이터 디버깅' })
+  debugTypes() {
+    return this.recruitmentService.debugTypes();
+  }
 } 

@@ -138,19 +138,52 @@ export class RecruitmentService {
   }
 
   async getCompanies(type?: string): Promise<string[]> {
+    console.log('getCompanies 호출됨 - type:', type); // 디버깅용
+    
     const queryBuilder = this.recruitmentRepository.createQueryBuilder('recruitment');
     
     if (type) {
       queryBuilder.andWhere('recruitment.type = :type', { type });
+      console.log('type 조건 추가됨:', type); // 디버깅용
     }
     
     queryBuilder
       .select('DISTINCT recruitment.clientName', 'clientName')
       .where('recruitment.clientName IS NOT NULL')
       .andWhere('recruitment.clientName != :empty', { empty: '' });
-      // ORDER BY 제거
+      
+    // 실제 실행되는 SQL 쿼리 확인
+    console.log('실행될 SQL:', queryBuilder.getSql());
+    console.log('파라미터:', queryBuilder.getParameters());
 
     const result = await queryBuilder.getRawMany();
-    return result.map(item => item.clientName);
+    console.log('조회 결과 개수:', result.length); // 디버깅용
+    
+    const companies = result.map(item => item.clientName);
+    return companies;
+  }
+
+  // 임시 디버깅용 메서드 추가
+  async debugTypes(): Promise<any> {
+    const allData = await this.recruitmentRepository.find({
+      select: ['clientName', 'type']
+    });
+    
+    const dispatch = allData.filter(item => item.type === 'dispatch');
+    const recruitment = allData.filter(item => item.type === 'recruitment');
+    
+    console.log('전체 데이터 개수:', allData.length);
+    console.log('dispatch 개수:', dispatch.length);
+    console.log('recruitment 개수:', recruitment.length);
+    console.log('dispatch 업체들:', [...new Set(dispatch.map(d => d.clientName))]);
+    console.log('recruitment 업체들:', [...new Set(recruitment.map(r => r.clientName))]);
+    
+    return {
+      total: allData.length,
+      dispatch: dispatch.length,
+      recruitment: recruitment.length,
+      dispatchCompanies: [...new Set(dispatch.map(d => d.clientName))],
+      recruitmentCompanies: [...new Set(recruitment.map(r => r.clientName))]
+    };
   }
 } 
